@@ -6,7 +6,44 @@ import mysql.connector as mycon
 ###########################################################
 logger = logging.getLogger(__name__)
 ###########################################################
+def _read(filename, dbname):
+  """
+  Read the private file with the database credentials
+  
+  @param filename: full path to the private file with the database credentials
+  @type filename: str
+  @param dbname: the name of the desired database to get the credentials
+  @type dbname: str
+  @return: dictionary with the credential as key/value pairs
+  @rtype: dict
+  """
+  if not os.path.exists(filename):
+    logger.error('_read: the file {0} does not exist'.format(filename))
+    sys.exit(1)
+ 
+  if not check_dbname(dbname):
+    logger.error('_read: the specified database name is invalid')
+    sys.exit(1) 
 
+  with open(filename, 'r') as r: lines = r.readlines()
+
+  dic = dict()
+
+  if dbname == 'hpc_thnkng_stats':
+    start = 0
+    end   = 5
+  else:
+    start = 6
+    end   = 11
+  lines   = lines[start : end]
+
+  for line in lines:
+    key, val = line.split(':')
+    dic[key] = val
+  
+  return dic
+
+###########################################################
 def get_dic_connections(dbname):
   """
   This function returns a dictionary with the login info for the two databases.
@@ -19,24 +56,11 @@ def get_dic_connections(dbname):
   @return: the connection arguments
   @rtype: dict
   """
-  if dbname not in ['hpc_thnkng_stats', 'hpc_thnkng_reps']:
+  if not check_dbname(dbname): 
     logger.error('get_dic_connections: dbname:{0} is not accepted'.format(dbname))
     sys.exit(1)
 
-  if dbname == 'hpc_thnkng_stats':
-    dic = {'user':dbname,  
-                'password':'adapaWYxLzZPysRZ',
-                'host': 'icts-db-mysqldb2.icts.kuleuven.be',
-                'database': dbname,
-                'port':3306}
-  else:
-    dic = {'user':dbname,
-               'password':'vxmEZ7TudTUTSshh',
-               'host': 'icts-db-mysqldb2.icts.kuleuven.be',
-               'database': dbname,
-               'port': 3306}
-
-  return dic
+  return _read('private', dbname)
 
 ###########################################################
 
