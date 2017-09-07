@@ -13,3 +13,15 @@ The `thnkng_db` class can provide instances for two databases:
 ## Requirements
 + Python 2.7
 + `mysql.connector` package (https://www.mysql.com/products/connector)
+
+## Example
+```python
+from import thnkng import db_lib as dl
+
+with dl.thnkng_db('hpc_thnkng_stats') as db:
+  conn  = db.get_connection()
+	curs  = db.get_cursor()
+	query = 'select * from users'
+	curs.execute(query)
+	users = curs.fetchall()
+```
