@@ -38,9 +38,10 @@ def _read(filename, dbname):
   lines   = lines[start : end]
 
   for line in lines:
-    key, val = line.split(':')
+    key, val = line.rstrip('\r\n').split(':')
     dic[key] = val
-  
+  dic['port'] = int(dic['port'])
+
   return dic
 
 ###########################################################
@@ -60,7 +61,8 @@ def get_dic_connections(dbname):
     logger.error('get_dic_connections: dbname:{0} is not accepted'.format(dbname))
     sys.exit(1)
 
-  return _read('private', dbname)
+  private = os.path.dirname(__file__) + '/private'
+  return _read(private, dbname)
 
 ###########################################################
 

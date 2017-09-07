@@ -1,7 +1,7 @@
 # thnkng
 
 ## Purpose
-This repository provides a simple Python interface to the MySQL database for the users on the VSC clusters. With this, it is possible to query for the users information across multiple tables, and easily merge the results.
+This repository provides a simple Python interface to the MySQL database for the users on the VSC **ThinKing** cluster (hence the repository name). With this, it is possible to query for the users information across multiple tables, and easily merge the results.
 
 The `thnkng_db` class can provide instances for two databases:
 + `hpc_thnkng_stats`
